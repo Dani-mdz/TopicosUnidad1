@@ -23,6 +23,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(235, 245, 251));
+
         jLabel1.setFont(new java.awt.Font("Shock Graffiti", 3, 48)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 0, 0));
         jLabel1.setText("AUTOLAVADO EL RAYO MCQUEEN");
