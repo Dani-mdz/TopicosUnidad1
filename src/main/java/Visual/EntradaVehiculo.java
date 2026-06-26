@@ -1,5 +1,6 @@
 package Visual;
 
+import java.util.Locale;
 import Clases.Auto;
 import Clases.GestorDatos;
 import Clases.Servicios;
@@ -13,6 +14,9 @@ import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
 
 public class EntradaVehiculo extends javax.swing.JFrame {
 
@@ -25,6 +29,7 @@ public class EntradaVehiculo extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         configurarRestricciones();
         configurarEventosCalculo();
+        configurarSelectorClientes();
     }
 
     private void configurarRestricciones() {
@@ -115,7 +120,7 @@ public class EntradaVehiculo extends javax.swing.JFrame {
         for(Servicios s : serviciosActuales) { total += s.getCosto(); }
         
         txtPrecioUnitario.setText(desglosePrecios.toString().replace("\n", ", "));
-        txtPrecioFinal.setText(String.format("%.2f", total));
+        txtPrecioFinal.setText(String.format(Locale.US, "%.2f", total));
     }
 
     private void agregarServicio(double costo, String nombre, String tipo, StringBuilder desglose) {
@@ -133,6 +138,7 @@ public class EntradaVehiculo extends javax.swing.JFrame {
         txtModelo = new javax.swing.JTextField();
         txtColor = new javax.swing.JTextField();
         txtReferencia = new javax.swing.JTextField();
+        jcbClienteRegistrado = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jrbExpress = new javax.swing.JRadioButton();
         jrbBasico = new javax.swing.JRadioButton();
@@ -166,27 +172,28 @@ public class EntradaVehiculo extends javax.swing.JFrame {
         jdcFechaEntrada = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(235, 245, 251));
 
-        jPanel1.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel1.setBackground(new java.awt.Color(235, 245, 251));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("DATOS CLIENTE"));
 
-        txtTelefono.setBackground(new java.awt.Color(153, 255, 153));
+        txtTelefono.setBackground(new java.awt.Color(214, 234, 248));
         txtTelefono.setBorder(javax.swing.BorderFactory.createTitledBorder("TELEFONO"));
 
         btnRellenar.setBackground(new java.awt.Color(153, 153, 255));
         btnRellenar.setText("RELLENAR");
         btnRellenar.addActionListener(this::btnRellenarActionPerformed);
 
-        txtMarca.setBackground(new java.awt.Color(153, 255, 153));
+        txtMarca.setBackground(new java.awt.Color(214, 234, 248));
         txtMarca.setBorder(javax.swing.BorderFactory.createTitledBorder("MARCA"));
 
-        txtModelo.setBackground(new java.awt.Color(153, 255, 153));
+        txtModelo.setBackground(new java.awt.Color(214, 234, 248));
         txtModelo.setBorder(javax.swing.BorderFactory.createTitledBorder("MODELO"));
 
-        txtColor.setBackground(new java.awt.Color(153, 255, 153));
+        txtColor.setBackground(new java.awt.Color(214, 234, 248));
         txtColor.setBorder(javax.swing.BorderFactory.createTitledBorder("COLOR"));
 
-        txtReferencia.setBackground(new java.awt.Color(153, 255, 153));
+        txtReferencia.setBackground(new java.awt.Color(214, 234, 248));
         txtReferencia.setBorder(javax.swing.BorderFactory.createTitledBorder("REFERENCIA"));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -195,18 +202,20 @@ public class EntradaVehiculo extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtReferencia)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnRellenar)
                         .addGap(24, 24, 24)
-                        .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtModelo, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(jcbClienteRegistrado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -220,13 +229,18 @@ public class EntradaVehiculo extends javax.swing.JFrame {
                         .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnRellenar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jcbClienteRegistrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.setBackground(new java.awt.Color(204, 255, 204));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "SERVICIO DE LAVADO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Liberation Sans", 0, 13), new java.awt.Color(30, 41, 59))); // NOI18N
+        jPanel3.setBackground(new java.awt.Color(214, 234, 248));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "SERVICIO DE LAVADO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(30, 41, 59))); // NOI18N
         jPanel3.setForeground(new java.awt.Color(30, 41, 59));
 
         jrbExpress.setText("EXPRESS");
@@ -268,7 +282,7 @@ public class EntradaVehiculo extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel2.setBackground(new java.awt.Color(214, 234, 248));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("SERVICIOS EXTRA"));
 
         jcbLavadoMotor.setText("LAVADO DE MOTOR");
@@ -311,7 +325,7 @@ public class EntradaVehiculo extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel4.setBackground(new java.awt.Color(214, 234, 248));
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("PRODUCTOS ADICIONALES"));
 
         jcbPañoMicrofibra.setText("PAÑO DE MICROFIBRA");
@@ -344,7 +358,7 @@ public class EntradaVehiculo extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel5.setBackground(new java.awt.Color(153, 255, 153));
+        jPanel5.setBackground(new java.awt.Color(235, 245, 251));
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("COSTO"));
 
         txtPrecioFinal.setBackground(new java.awt.Color(204, 255, 255));
@@ -416,7 +430,7 @@ public class EntradaVehiculo extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel6.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel6.setBackground(new java.awt.Color(214, 234, 248));
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("COMENTARIOS / SOLICITUDES"));
 
         txtComentarios.setColumns(20);
@@ -440,7 +454,7 @@ public class EntradaVehiculo extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel7.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel7.setBackground(new java.awt.Color(214, 234, 248));
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("ENTRADA"));
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -552,7 +566,7 @@ public class EntradaVehiculo extends javax.swing.JFrame {
             return;
         }
 
-        double total = Double.parseDouble(txtPrecioFinal.getText().replace(",", "."));
+        double total = Double.parseDouble(txtPrecioFinal.getText());
         String fechaActual = jdcFechaEntrada.getDate().toString();
 
         GestorDatos.Orden nuevaOrden = new GestorDatos.Orden(
@@ -585,6 +599,41 @@ public class EntradaVehiculo extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new EntradaVehiculo().setVisible(true));
     }
+    
+    private void configurarSelectorClientes() {
+    // Llena el combo con todos los clientes ya registrados
+    DefaultComboBoxModel<Auto> modelo = new DefaultComboBoxModel<>();
+    modelo.addElement(null); // opción vacía para no seleccionar a nadie
+    for (Auto auto : GestorDatos.obtenerListaClientes()) {
+        modelo.addElement(auto);
+    }
+    jcbClienteRegistrado.setModel(modelo);
+
+    // Muestra "Nombre Apellido - Telefono" en vez del toString() por defecto
+    jcbClienteRegistrado.setRenderer(new DefaultListCellRenderer() {
+        @Override
+        public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (value == null) {
+                setText("-- Seleccione un cliente --");
+            } else {
+                Auto auto = (Auto) value;
+                String nombreCompleto = (auto.getCliente() != null) ? auto.getCliente().toString() : "Sin nombre";
+                setText(nombreCompleto + " - " + auto.getTelefono());
+            }
+            return this;
+        }
+    });
+
+    // Al elegir un cliente del combo, autollena el telefono y dispara el mismo "Rellenar"
+    jcbClienteRegistrado.addActionListener((java.awt.event.ActionEvent e) -> {
+        Auto seleccionado = (Auto) jcbClienteRegistrado.getSelectedItem();
+        if (seleccionado != null) {
+            txtTelefono.setText(seleccionado.getTelefono());
+            btnRellenarActionPerformed(e);
+        }
+    });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrarE;
@@ -603,6 +652,7 @@ public class EntradaVehiculo extends javax.swing.JFrame {
     private javax.swing.JCheckBox jcbAire;
     private javax.swing.JCheckBox jcbAromatizante;
     private javax.swing.JCheckBox jcbChasis;
+    private javax.swing.JComboBox<Clases.Auto> jcbClienteRegistrado;
     private javax.swing.JCheckBox jcbLavadoMotor;
     private javax.swing.JCheckBox jcbLimpiaparabrisas;
     private javax.swing.JCheckBox jcbNiveles;

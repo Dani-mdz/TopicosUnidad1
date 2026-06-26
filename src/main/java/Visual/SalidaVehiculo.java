@@ -8,6 +8,9 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
 
 public class SalidaVehiculo extends javax.swing.JFrame {
 
@@ -19,6 +22,7 @@ public class SalidaVehiculo extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         configurarFechaHora();
         inicializarTabla();
+        configurarSelectorClientes();
     }
 
     private void configurarFechaHora() {
@@ -47,6 +51,41 @@ public class SalidaVehiculo extends javax.swing.JFrame {
         };
         jtVenta.setModel(modeloVenta);
     }
+    
+    private void configurarSelectorClientes() {
+    // Llena el combo con todos los clientes ya registrados
+    DefaultComboBoxModel<Auto> modelo = new DefaultComboBoxModel<>();
+    modelo.addElement(null); // opción vacía para no seleccionar a nadie
+    for (Auto auto : GestorDatos.obtenerListaClientes()) {
+        modelo.addElement(auto);
+    }
+    jcbClienteRegistrado.setModel(modelo);
+
+    // Muestra "Nombre Apellido - Telefono" en vez del toString() por defecto
+    jcbClienteRegistrado.setRenderer(new DefaultListCellRenderer() {
+        @Override
+        public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (value == null) {
+                setText("-- Seleccione un cliente --");
+            } else {
+                Auto auto = (Auto) value;
+                String nombreCompleto = (auto.getCliente() != null) ? auto.getCliente().toString() : "Sin nombre";
+                setText(nombreCompleto + " - " + auto.getTelefono());
+            }
+            return this;
+        }
+    });
+
+    // Al elegir un cliente del combo, autollena el telefono y dispara el mismo "Verificar"
+    jcbClienteRegistrado.addActionListener((java.awt.event.ActionEvent e) -> {
+        Auto seleccionado = (Auto) jcbClienteRegistrado.getSelectedItem();
+        if (seleccionado != null) {
+            txtTelefono.setText(seleccionado.getTelefono());
+            btnVerificarActionPerformed(e);
+        }
+    });
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -61,11 +100,15 @@ public class SalidaVehiculo extends javax.swing.JFrame {
         jdcFechaSalida = new com.toedter.calendar.JDateChooser();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtVenta = new javax.swing.JTable();
+        jcbClienteRegistrado = new javax.swing.JComboBox<>();
+        btnRegistrarSalida = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtTicket = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(235, 245, 251));
 
         txtTelefono.setBorder(javax.swing.BorderFactory.createTitledBorder("TELEFONO"));
 
@@ -91,6 +134,9 @@ public class SalidaVehiculo extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jtVenta);
 
+        btnRegistrarSalida.setText("Registrar Salida");
+        btnRegistrarSalida.addActionListener(this::btnRegistrarSalidaActionPerformed);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -98,20 +144,25 @@ public class SalidaVehiculo extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtTelefono)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(spnHora, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(spnMinuto, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(btnVerificar)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnRegresar)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnTicket)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtTelefono)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(spnHora, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(spnMinuto, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnVerificar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnRegresar)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnTicket, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnRegistrarSalida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jcbClienteRegistrado, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jdcFechaSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(65, Short.MAX_VALUE))
@@ -125,11 +176,13 @@ public class SalidaVehiculo extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVerificar)
                     .addComponent(btnRegresar)
-                    .addComponent(btnTicket))
+                    .addComponent(btnTicket)
+                    .addComponent(jcbClienteRegistrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(spnHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spnMinuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spnMinuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRegistrarSalida))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jdcFechaSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -137,6 +190,7 @@ public class SalidaVehiculo extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jPanel2.setBackground(new java.awt.Color(235, 245, 251));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtTicket.setColumns(20);
@@ -297,6 +351,39 @@ if (autoActivo == null) {
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    private void btnRegistrarSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarSalidaActionPerformed
+        // TODO add your handling code here:
+        
+    if (autoActivo == null) {
+        JOptionPane.showMessageDialog(this, "Verifique un vehículo por teléfono antes de registrar la salida.");
+        return;
+    }
+
+    GestorDatos.Orden ordenActiva = null;
+    for (GestorDatos.Orden orden : GestorDatos.obtenerOrdenesPendientes()) {
+        if (orden.getAuto().getTelefono().equals(autoActivo.getTelefono())) {
+            ordenActiva = orden;
+            break;
+        }
+    }
+
+    if (ordenActiva == null) {
+        JOptionPane.showMessageDialog(this, "No se encontró una orden activa para este vehículo.");
+        return;
+    }
+
+    GestorDatos.eliminarOrdenPendiente(ordenActiva.getNumeroOrden());
+
+    JOptionPane.showMessageDialog(this, "Salida registrada con éxito.");
+
+    autoActivo = null;
+    txtTelefono.setText("");
+    txtTicket.setText("");
+    modeloVenta.setRowCount(0);
+    configurarSelectorClientes();
+    
+    }//GEN-LAST:event_btnRegistrarSalidaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -321,8 +408,11 @@ if (autoActivo == null) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new SalidaVehiculo().setVisible(true));
     }
+    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegistrarSalida;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnTicket;
     private javax.swing.JButton btnVerificar;
@@ -330,6 +420,7 @@ if (autoActivo == null) {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JComboBox<Clases.Auto> jcbClienteRegistrado;
     private com.toedter.calendar.JDateChooser jdcFechaSalida;
     private javax.swing.JTable jtVenta;
     private javax.swing.JSpinner spnHora;

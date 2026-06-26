@@ -74,6 +74,10 @@ public class GestorDatos {
         }
         return null;
     }
+
+    public static void eliminarOrdenPendiente(int numeroOrden) {
+        ordenesPendientes.removeIf(o -> o.getNumeroOrden() == numeroOrden);
+    }
     public static class Orden {
         private int numeroOrden;
         private Auto auto;

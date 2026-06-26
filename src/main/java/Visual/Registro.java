@@ -83,7 +83,9 @@ public class Registro extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(235, 245, 251));
 
+        jPanel1.setBackground(new java.awt.Color(235, 245, 251));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("DATOS CLIENTE"));
 
         lblNombre.setText("NOMBRE:");
@@ -135,6 +137,7 @@ public class Registro extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel2.setBackground(new java.awt.Color(235, 245, 251));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("DATOS VEHICULO"));
 
         lblVehiculo.setText("VEHICULO:");
