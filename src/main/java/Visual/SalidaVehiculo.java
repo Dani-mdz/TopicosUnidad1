@@ -2,6 +2,7 @@ package Visual;
 
 import Clases.Auto;
 import Clases.GestorDatos;
+import Clases.Servicios;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -181,37 +182,112 @@ public class SalidaVehiculo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVerificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarActionPerformed
-        // TODO add your handling code here:
-        String telefonoBuscar = txtTelefono.getText().trim();
-        // Busca el auto con el teléfono
-        Auto autoEncontrado = GestorDatos.buscarPorTelefono(telefonoBuscar);
-        if (autoEncontrado != null) {
-        // vehículo encontrado
-        javax.swing.JOptionPane.showMessageDialog(this, "Vehículo localizado: " + autoEncontrado.getMarca() + " " + autoEncontrado.getModelo());
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "No se encontró ningún vehículo con ese número de teléfono.");
+String telefonoBuscar = txtTelefono.getText().trim();
+    Auto autoEncontrado = GestorDatos.buscarPorTelefono(telefonoBuscar);
+    
+    if (autoEncontrado != null) {
+        this.autoActivo = autoEncontrado;
+        
+        // 1. Limpiar la tabla por si había datos de una consulta anterior
+        modeloVenta.setRowCount(0);
+        
+        // 2. Buscar la orden para conseguir sus servicios
+        GestorDatos.Orden ordenActiva = null;
+        for (GestorDatos.Orden orden : GestorDatos.obtenerOrdenesPendientes()) {
+            if (orden.getAuto().getTelefono().equals(autoActivo.getTelefono())) {
+                ordenActiva = orden;
+                break;
+            }
         }
+        
+        // 3. Si encontramos la orden, llenamos la tabla de la interfaz
+        if (ordenActiva != null) {
+            for (Clases.Servicios servicio : ordenActiva.getServiciosAplicados()) {
+                Object[] fila = new Object[]{
+                    servicio.getNombreServicio(), // Columna 1: Nombre
+                    servicio.getCosto(),          // Columna 2: Precio Unitario
+                    servicio.getCosto()           // Columna 3: Precio Total (o tu variable de total)
+                };
+                modeloVenta.addRow(fila); // Agrega la fila a la tabla visual
+            }
+        }
+        
+        javax.swing.JOptionPane.showMessageDialog(this, "Vehículo localizado: " + autoActivo.getMarca() + " " + autoActivo.getModelo());
+    } else {
+        this.autoActivo = null;
+        modeloVenta.setRowCount(0); // Limpia si no hay resultados
+        javax.swing.JOptionPane.showMessageDialog(this, "No se encontró ningún vehículo con ese número de teléfono.");
+    }
     }//GEN-LAST:event_btnVerificarActionPerformed
 
     private void btnTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTicketActionPerformed
         // TODO add your handling code here:
-        if (autoActivo == null) {
-            JOptionPane.showMessageDialog(this, "Verifique un vehículo por teléfono antes de generar el ticket.");
-            return;
+if (autoActivo == null) {
+        JOptionPane.showMessageDialog(this, "Verifique un vehículo por teléfono antes de generar el ticket.");
+        return;
+    }
+
+    // 1. Buscar la orden del cliente en las órdenes pendientes
+    GestorDatos.Orden ordenActiva = null;
+    for (GestorDatos.Orden orden : GestorDatos.obtenerOrdenesPendientes()) {
+        if (orden.getAuto().getTelefono().equals(autoActivo.getTelefono())) {
+            ordenActiva = orden;
+            break;
         }
+    }
 
-        StringBuilder ticket = new StringBuilder();
-        ticket.append("      AUTOLAVADO EL RAYO MCQUEEN    \n");
-        ticket.append("FECHA: ").append(jdcFechaSalida.getDate().toString()).append("\n");
-        ticket.append("HORA: ").append(spnHora.getValue()).append(":").append(spnMinuto.getValue()).append("\n");
-        ticket.append("TELEFONO: ").append(autoActivo.getTelefono()).append("\n");
-        ticket.append("VEHICULO: ").append(autoActivo.getMarca()).append(" ").append(autoActivo.getModelo()).append("\n");
-        ticket.append("COLOR:    ").append(autoActivo.getColor()).append("\n");
-        ticket.append("DETALLE DE COBRO\n");
-        ticket.append(String.format("%-25s $%7.2f\n", "Servicio Base", 0.0)); // reemplaza a costo real
-        ticket.append("      ¡GRACIAS POR SU PREFERENCIA!  \n");
+    if (ordenActiva == null) {
+        JOptionPane.showMessageDialog(this, "No se encontró una orden activa para este vehículo.");
+        return;
+    }
 
-        txtTicket.setText(ticket.toString());
+    // 2. Estilos del ticket físico
+    String lineaGruesa = "=========================================\n";
+    String lineaFina   = "-----------------------------------------\n";
+    StringBuilder ticket = new StringBuilder();
+    
+    // Encabezado
+    ticket.append(lineaGruesa);
+    ticket.append("       AUTOLAVADO EL RAYO MCQUEEN        \n");
+    ticket.append("  \"Cuchau! Limpios en un abrir y cerrar\" \n");
+    ticket.append(lineaGruesa);
+    
+    // Número de orden automático, fecha limpia y hora con formato 00:00
+    ticket.append(String.format("TICKET #: %04d\n", ordenActiva.getNumeroOrden()));
+    ticket.append(String.format("FECHA: %-15s  HORA: %02d:%02d\n", 
+            new java.text.SimpleDateFormat("dd/MM/yyyy").format(jdcFechaSalida.getDate()), 
+            spnHora.getValue(), spnMinuto.getValue()));
+    ticket.append(lineaFina);
+    
+    // Datos del Cliente y Vehículo
+    ticket.append("TELÉFONO : ").append(autoActivo.getTelefono()).append("\n");
+    ticket.append("VEHÍCULO : ").append(autoActivo.getMarca()).append(" ").append(autoActivo.getModelo()).append("\n");
+    ticket.append("COLOR    : ").append(autoActivo.getColor()).append("\n");
+    ticket.append(lineaGruesa);
+    
+    // Encabezado de la tabla de costos
+    ticket.append(String.format("%-28s %11s\n", "DESCRIPCIÓN", "PRECIO"));
+    ticket.append(lineaFina);
+    
+    // 3. RECORRER Y RECOGER LOS PRECIOS REALES
+    // Este ciclo lee cada servicio aplicado y pone su nombre y costo real alineados
+    for (Servicios servicio : ordenActiva.getServiciosAplicados()) {
+        ticket.append(String.format("%-28s $%10.2f\n", servicio.getNombreServicio(), servicio.getCosto()));
+    }
+    
+    ticket.append(lineaFina);
+    
+    // Total Real de la orden
+    ticket.append(String.format("%-28s $%10.2f\n", "TOTAL A PAGAR:", ordenActiva.getTotalCosto()));
+    ticket.append(lineaGruesa);
+    
+    // Despedida
+    ticket.append("       ¡GRACIAS POR SU PREFERENCIA!      \n");
+    ticket.append("             ¡REGRESE PRONTO!            \n");
+    ticket.append(lineaGruesa);
+
+    // Estampar todo en el JTextArea
+    txtTicket.setText(ticket.toString());
     }//GEN-LAST:event_btnTicketActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
