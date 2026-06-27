@@ -85,43 +85,43 @@ public class EntradaVehiculo extends javax.swing.JFrame {
         jcbLimpiaparabrisas.addActionListener(calculador);
     }
 
+    
     private void calcularPreciosEnTiempoReal() {
-        serviciosActuales.clear();
-        double total = 0.0;
-        StringBuilder desglosePrecios = new StringBuilder();
+    serviciosActuales.clear();
+    double total = 0.0;
+    double ultimoPrecio = 0.0;  // ← AGREGA ESTA VARIABLE
+    StringBuilder desglosePrecios = new StringBuilder();
 
-        // lavado y descripción
-        if (jrbExpress.isSelected()) {
-            txtDescripcion.setText("EXPRESS:\n- Solo exterior del vehículo.");
-            agregarServicio(90.0, "Express", "Servicio", desglosePrecios);
-        } else if (jrbBasico.isSelected()) {
-            txtDescripcion.setText("BÁSICO:\n- Exterior, tapetes, aspirado, abrillantador.");
-            agregarServicio(150.0, "Básico", "Servicio", desglosePrecios);
-        } else if (jrbDetallado.isSelected()) {
-            txtDescripcion.setText("DETALLADO:\n- Limpieza profunda, eliminación olores, lavado asientos.");
-            agregarServicio(950.0, "Detallado", "Servicio", desglosePrecios);
-        } else {
-            txtDescripcion.setText("");
-        }
-
-        // sumar extras
-        if (jcbLavadoMotor.isSelected()) agregarServicio(200.0, "Lavado de Motor", "Extra", desglosePrecios);
-        if (jcbAire.isSelected()) agregarServicio(30.0, "Aire llantas", "Extra", desglosePrecios);
-        if (jcbChasis.isSelected()) agregarServicio(150.0, "Lavado Chasis", "Extra", desglosePrecios);
-        if (jcbNiveles.isSelected()) agregarServicio(50.0, "Verificar Niveles", "Extra", desglosePrecios);
-        if (jcbPulido.isSelected()) agregarServicio(450.0, "Pulido y Encerado", "Extra", desglosePrecios);
-
-        // sumar productos
-        if (jcbPañoMicrofibra.isSelected()) agregarServicio(60.0, "Paño Microfibra", "Producto", desglosePrecios);
-        if (jcbAromatizante.isSelected()) agregarServicio(40.0, "Aromatizante", "Producto", desglosePrecios);
-        if (jcbLimpiaparabrisas.isSelected()) agregarServicio(80.0, "Limpia Parabrisas", "Producto", desglosePrecios);
-
-        // actualizar txt
-        for(Servicios s : serviciosActuales) { total += s.getCosto(); }
-        
-        txtPrecioUnitario.setText(desglosePrecios.toString().replace("\n", ", "));
-        txtPrecioFinal.setText(String.format(Locale.US, "%.2f", total));
+    if (jrbExpress.isSelected()) {
+        txtDescripcion.setText("EXPRESS:\n- Solo exterior del vehículo.");
+        agregarServicio(90.0, "Express", "Servicio", desglosePrecios);
+        ultimoPrecio = 90.0;  // ← REGISTRA EL PRECIO
+    } else if (jrbBasico.isSelected()) {
+        txtDescripcion.setText("BÁSICO:\n- Exterior, tapetes, aspirado, abrillantador.");
+        agregarServicio(150.0, "Básico", "Servicio", desglosePrecios);
+        ultimoPrecio = 150.0;
+    } else if (jrbDetallado.isSelected()) {
+        txtDescripcion.setText("DETALLADO:\n- Limpieza profunda, eliminación olores, lavado asientos.");
+        agregarServicio(950.0, "Detallado", "Servicio", desglosePrecios);
+        ultimoPrecio = 950.0;
+    } else {
+        txtDescripcion.setText("");
     }
+
+    if (jcbLavadoMotor.isSelected())    { agregarServicio(200.0, "Lavado de Motor",   "Extra",    desglosePrecios); ultimoPrecio = 200.0; }
+    if (jcbAire.isSelected())           { agregarServicio(30.0,  "Aire llantas",       "Extra",    desglosePrecios); ultimoPrecio = 30.0;  }
+    if (jcbChasis.isSelected())         { agregarServicio(150.0, "Lavado Chasis",      "Extra",    desglosePrecios); ultimoPrecio = 150.0; }
+    if (jcbNiveles.isSelected())        { agregarServicio(50.0,  "Verificar Niveles",  "Extra",    desglosePrecios); ultimoPrecio = 50.0;  }
+    if (jcbPulido.isSelected())         { agregarServicio(450.0, "Pulido y Encerado",  "Extra",    desglosePrecios); ultimoPrecio = 450.0; }
+    if (jcbPañoMicrofibra.isSelected()) { agregarServicio(60.0,  "Paño Microfibra",    "Producto", desglosePrecios); ultimoPrecio = 60.0;  }
+    if (jcbAromatizante.isSelected())   { agregarServicio(40.0,  "Aromatizante",       "Producto", desglosePrecios); ultimoPrecio = 40.0;  }
+    if (jcbLimpiaparabrisas.isSelected()){ agregarServicio(80.0, "Limpia Parabrisas",  "Producto", desglosePrecios); ultimoPrecio = 80.0;  }
+
+    for (Servicios s : serviciosActuales) { total += s.getCosto(); }
+
+    txtPrecioUnitario.setText("$" + String.format(Locale.US, "%.2f", ultimoPrecio));  // ← SOLO EL ÚLTIMO
+    txtPrecioFinal.setText(String.format(Locale.US, "%.2f", total));
+}
 
     private void agregarServicio(double costo, String nombre, String tipo, StringBuilder desglose) {
         serviciosActuales.add(new Servicios(0, nombre, costo, tipo));
