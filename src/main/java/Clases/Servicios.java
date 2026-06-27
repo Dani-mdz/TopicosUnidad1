@@ -1,29 +1,47 @@
 package Clases;
 
 public class Servicios {
-    private int idServicio;
-    private String nombreServicio;
+    
+    private int id;
+    private String nombre;
     private double costo;
     private String tipo;
 
-    public Servicios() {}
-
-    public Servicios(int idServicio, String nombreServicio, double costo, String tipo) {
-        this.idServicio = idServicio;
-        this.nombreServicio = nombreServicio;
+    // Constructor
+    public Servicios(int id, String nombre, double costo, String tipo) {
+        this.id = id;
+        this.nombre = nombre;
         this.costo = costo;
         this.tipo = tipo;
     }
+    public int getId() {
+        return id;
+    }
 
-    public int getIdServicio() { return idServicio; }
-    public void setIdServicio(int idServicio) { this.idServicio = idServicio; }
-    public String getNombreServicio() { return nombreServicio; }
-    public void setNombreServicio(String nombreServicio) { this.nombreServicio = nombreServicio; }
-    public double getCosto() { return costo; }
-    public void setCosto(double costo) { this.costo = costo; }
-    public String getTipo() { return tipo; }
-    public void setTipo(String tipo) { this.tipo = tipo; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    @Override
-    public String toString() { return nombreServicio + " ($" + costo + ")"; }
+    public double getCosto() {
+        return costo;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setCosto(double costo) {
+        this.costo = costo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 }
