@@ -1,11 +1,14 @@
 package Visual;
 
+import javax.swing.JFrame;
+
 public class VentanaPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName());
 
     public VentanaPrincipal() {
         initComponents();
+        hacerResponsivo(); 
         this.setLocationRelativeTo(null);
     }
 
@@ -123,6 +126,50 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnListaActionPerformed
 
+    private void hacerResponsivo() {
+    // Contenido centrado con BoxLayout
+    jPanel1.setLayout(new java.awt.GridBagLayout());
+    jPanel1.removeAll();
+
+    javax.swing.JPanel centro = new javax.swing.JPanel();
+    centro.setBackground(new java.awt.Color(235, 245, 251));
+    centro.setLayout(new javax.swing.BoxLayout(centro, javax.swing.BoxLayout.Y_AXIS));
+
+    jLabel1.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+    jLabel2.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+    btnRegistrarCliente.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+    btnEntradaVehiculo.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+    btnSalidaVehiculo.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+    btnLista.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+
+    int w = 260, h = 35;
+    btnRegistrarCliente.setMaximumSize(new java.awt.Dimension(w, h));
+    btnEntradaVehiculo.setMaximumSize(new java.awt.Dimension(w, h));
+    btnSalidaVehiculo.setMaximumSize(new java.awt.Dimension(w, h));
+    btnLista.setMaximumSize(new java.awt.Dimension(w, h));
+
+    centro.add(javax.swing.Box.createVerticalGlue());
+    centro.add(jLabel1);
+    centro.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 15)));
+    centro.add(jLabel2);
+    centro.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 50)));
+    centro.add(btnRegistrarCliente);
+    centro.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 15)));
+    centro.add(btnEntradaVehiculo);
+    centro.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 15)));
+    centro.add(btnSalidaVehiculo);
+    centro.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 15)));
+    centro.add(btnLista);
+    centro.add(javax.swing.Box.createVerticalGlue());
+
+    jPanel1.add(centro);
+
+    getContentPane().removeAll();
+    getContentPane().setLayout(new java.awt.BorderLayout());
+    getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
+    setExtendedState(JFrame.MAXIMIZED_BOTH); // pantalla completa
+}
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

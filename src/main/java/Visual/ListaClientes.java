@@ -3,6 +3,7 @@ package Visual;
 import Clases.Auto;
 import Clases.GestorDatos;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
 public class ListaClientes extends javax.swing.JFrame {
@@ -11,6 +12,7 @@ public class ListaClientes extends javax.swing.JFrame {
 
     public ListaClientes() {
         initComponents();
+        hacerResponsivo();
         this.setLocationRelativeTo(null);
         inicializarTabla();
         cargarTabla("");
@@ -216,6 +218,13 @@ public class ListaClientes extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    
+private void hacerResponsivo() {
+    getContentPane().removeAll();
+    getContentPane().setLayout(new java.awt.BorderLayout());
+    getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER); // tabla ocupa TODO
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
+}
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
