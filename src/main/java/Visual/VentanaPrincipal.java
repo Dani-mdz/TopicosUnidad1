@@ -126,7 +126,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnListaActionPerformed
 
-private void hacerResponsivo() {
+    private void hacerResponsivo() {
     // Contenido centrado con BoxLayout
     jPanel1.setLayout(new java.awt.GridBagLayout());
     jPanel1.removeAll();
