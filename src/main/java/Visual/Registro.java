@@ -4,6 +4,7 @@ import Clases.Auto;
 import Clases.GestorDatos;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Registro extends javax.swing.JFrame {
@@ -11,6 +12,7 @@ public class Registro extends javax.swing.JFrame {
     private Auto autoEdicion = null;
     public Registro() {
         initComponents();
+        hacerResponsivo();
         this.setLocationRelativeTo(null);
         configurarRestricciones();        
         // id automatico
@@ -20,6 +22,7 @@ public class Registro extends javax.swing.JFrame {
     // modificar cliente existente
     public Registro(Auto auto) {
         initComponents();
+         hacerResponsivo();
         this.setLocationRelativeTo(null);
         configurarRestricciones();
         this.autoEdicion = auto;
@@ -337,6 +340,14 @@ public class Registro extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+
+private void hacerResponsivo() {
+    getContentPane().removeAll();
+    getContentPane().setLayout(new java.awt.BorderLayout(0, 8));
+    getContentPane().add(jPanel1, java.awt.BorderLayout.NORTH);   // DATOS CLIENTE arriba (fijo)
+    getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);  // DATOS VEHICULO llena el resto
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
+}
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

@@ -67,7 +67,7 @@
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="lblNombre" max="32767" attributes="0"/>
                       <Component id="lblApellido" max="32767" attributes="0"/>
-                      <Component id="lblIdCliente" pref="65" max="32767" attributes="0"/>
+                      <Component id="lblIdCliente" max="32767" attributes="0"/>
                       <Component id="lblTelefono" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -178,7 +178,7 @@
                                   </Group>
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="btnLimpiar" pref="100" max="32767" attributes="0"/>
+                                      <Component id="btnLimpiar" max="32767" attributes="0"/>
                                       <Component id="btnRegresar" max="32767" attributes="0"/>
                                   </Group>
                               </Group>

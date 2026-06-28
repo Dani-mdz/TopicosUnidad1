@@ -10,6 +10,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JFrame;
 import javax.swing.JList;
 
 public class SalidaVehiculo extends javax.swing.JFrame {
@@ -19,6 +20,7 @@ public class SalidaVehiculo extends javax.swing.JFrame {
 
     public SalidaVehiculo() {
         initComponents();
+        hacerResponsivo();
         this.setLocationRelativeTo(null);
         configurarFechaHora();
         inicializarTabla();
@@ -383,7 +385,13 @@ if (autoActivo == null) {
     configurarSelectorClientes();
     
     }//GEN-LAST:event_btnRegistrarSalidaActionPerformed
-
+private void hacerResponsivo() {
+    getContentPane().removeAll();
+    getContentPane().setLayout(new java.awt.BorderLayout(8, 0));
+    getContentPane().add(jPanel1, java.awt.BorderLayout.WEST);    // datos cliente (fijo)
+    getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);  // resumen/costo llena el resto
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
+}
     /**
      * @param args the command line arguments
      */

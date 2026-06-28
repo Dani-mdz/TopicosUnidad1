@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JFrame;
 import javax.swing.JList;
 
 public class EntradaVehiculo extends javax.swing.JFrame {
@@ -26,6 +27,7 @@ public class EntradaVehiculo extends javax.swing.JFrame {
 
     public EntradaVehiculo() {
         initComponents();
+        hacerResponsivo();
         this.setLocationRelativeTo(null);
         configurarRestricciones();
         configurarEventosCalculo();
@@ -583,6 +585,34 @@ public class EntradaVehiculo extends javax.swing.JFrame {
         new VentanaPrincipal().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegistrarEActionPerformed
+private void hacerResponsivo() {
+    // Panel izquierdo: agrupa los paneles de servicios apilados
+    javax.swing.JPanel izquierdo = new javax.swing.JPanel(new java.awt.BorderLayout(0, 5));
+    izquierdo.setBackground(new java.awt.Color(235, 245, 251));
+
+    javax.swing.JPanel izqTop = new javax.swing.JPanel(new java.awt.GridLayout(1, 2, 5, 0));
+    izqTop.setBackground(new java.awt.Color(235, 245, 251));
+    izqTop.add(jPanel3); // SERVICIO DE LAVADO
+    izqTop.add(jPanel6); // COMENTARIOS
+
+    javax.swing.JPanel izqBot = new javax.swing.JPanel(new java.awt.GridLayout(1, 2, 5, 0));
+    izqBot.setBackground(new java.awt.Color(235, 245, 251));
+    izqBot.add(jPanel2); // SERVICIOS EXTRA
+    izqBot.add(jPanel4); // PRODUCTOS ADICIONALES
+
+    izquierdo.add(izqTop, java.awt.BorderLayout.CENTER);
+    izquierdo.add(izqBot, java.awt.BorderLayout.SOUTH);
+
+    // Layout principal
+    getContentPane().removeAll();
+    getContentPane().setLayout(new java.awt.BorderLayout(8, 5));
+    getContentPane().add(jPanel1, java.awt.BorderLayout.NORTH);    // DATOS CLIENTE arriba
+    getContentPane().add(izquierdo, java.awt.BorderLayout.CENTER); // Servicios al centro
+    getContentPane().add(jPanel5, java.awt.BorderLayout.EAST);     // COSTO a la derecha
+    getContentPane().add(jPanel7, java.awt.BorderLayout.SOUTH);    // ENTRADA abajo
+
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
+}
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
